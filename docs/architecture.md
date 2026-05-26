@@ -28,8 +28,6 @@
 - `src/app/` - Next.js App Router
 - `src/components/` - UI コンポーネント
 - `src/lib/` - ユーティリティ・スキーマ
-- `specs/` - 機能仕様書（speckit / 任意）
-- `.specify/` - speckit 設定・開発原則（任意）
 
 ## アーキテクチャ上の設計決定
 

@@ -31,7 +31,6 @@
 
 - エージェントが自律的に開発できる環境を優先
 - 明確で機械可読なドキュメント構造
-- `.specify/` ディレクトリによる仕様管理（必要に応じて導入）
 
 ### III. Simplicity
 
@@ -89,8 +88,6 @@ indie-dev-web-template/
 │   ├── development.md       # 開発ガイド（開発原則 / 規約 / 本ファイル）
 │   └── architecture.md      # アーキテクチャ設計
 │
-├── specs/                   # 機能仕様書（speckit / 任意）
-├── .specify/                # speckit 設定（任意）
 ├── .claude/                 # Claude Code 設定
 │
 ├── README.md                # プロジェクト概要
