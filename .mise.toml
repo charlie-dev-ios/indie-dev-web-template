@@ -1,2 +1,9 @@
 [tools]
 bun = "1.1.40"
+
+# .env.local の値をシェル env に展開する。
+# これにより `bun dev` 由来の `next dev` や `bunx playwright` 等の子プロセスでも
+# `process.env.PORT` 等が参照可能になる。
+# .env.local はフォーク先で個別に作成する（テンプレートには .env.local.example のみ同梱）。
+[env]
+_.file = { path = ".env.local", redact = true }

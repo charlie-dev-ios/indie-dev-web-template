@@ -15,7 +15,10 @@ Next.js (App Router) + React Compiler + TypeScript + Tailwind CSS v4 + Biome + B
 # 依存関係のインストール
 bun install
 
-# 開発サーバー起動（http://localhost:3000）
+# .env.local を作成（ポートを他プロジェクトと衝突しない値に）
+cp .env.local.example .env.local
+
+# 開発サーバー起動（http://localhost:${PORT}、デフォルト 3000）
 bun dev
 
 # テスト・静的解析
@@ -29,4 +32,5 @@ bun check
 2. `package.json` の `name` を新プロジェクト名に変更
 3. `src/app/layout.tsx` の `metadata` を更新
 4. `README.md` / `docs/` のテンプレ記述をプロジェクト固有内容に書き換え
-5. `.env.local.example` を `.env.local` にコピーして必要な値を設定
+5. `.env.local.example` を `.env.local` にコピーし、`PORT` を他プロジェクトと
+   衝突しない値（例: 3010）に変更。その他必要な値も設定
