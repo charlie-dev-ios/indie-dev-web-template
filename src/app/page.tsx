@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <main className="container mx-auto px-4 py-8 sm:py-12">
@@ -6,6 +8,14 @@ export default function Home() {
         Web 個人開発用のテンプレートです。`docs/`
         配下のドキュメントを参照して開発を始めてください。
       </p>
+      <div className="mt-6 flex gap-4 text-sm">
+        <Link href="/login" className="underline underline-offset-4">
+          ログイン
+        </Link>
+        <Link href="/account" className="underline underline-offset-4">
+          アカウント
+        </Link>
+      </div>
     </main>
   );
 }
