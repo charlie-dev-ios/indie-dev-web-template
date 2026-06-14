@@ -71,4 +71,12 @@ describe("updateSession", () => {
     expect(redirectFn).not.toHaveBeenCalled();
     expect(res).toBe(nextResponse);
   });
+
+  it("getUser が例外を投げても throw せずそのまま通す", async () => {
+    getUser.mockRejectedValue(new Error("boom"));
+    const { updateSession } = await import("./middleware");
+    const res = await updateSession(makeRequest("/"));
+
+    expect(res).toBe(nextResponse);
+  });
 });
