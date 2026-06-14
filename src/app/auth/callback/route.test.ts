@@ -44,11 +44,11 @@ describe("GET /auth/callback", () => {
 
     expect(exchangeCodeForSession).not.toHaveBeenCalled();
     expect(res.headers.get("location")).toBe(
-      "http://localhost:3000/login?error=auth",
+      `http://localhost:3000/login?error=${encodeURIComponent("認可コードがありません")}`,
     );
   });
 
-  it("交換に失敗したら login へエラー付きでリダイレクトする", async () => {
+  it("交換に失敗したらエラーメッセージ付きで login へリダイレクトする", async () => {
     exchangeCodeForSession.mockResolvedValue({ error: { message: "bad" } });
     const { GET } = await import("./route");
     const res = await GET(
@@ -56,7 +56,21 @@ describe("GET /auth/callback", () => {
     );
 
     expect(res.headers.get("location")).toBe(
-      "http://localhost:3000/login?error=auth",
+      "http://localhost:3000/login?error=bad",
+    );
+  });
+
+  it("プロバイダのエラーをそのまま login へ渡す", async () => {
+    const { GET } = await import("./route");
+    const res = await GET(
+      new Request(
+        "http://localhost:3000/auth/callback?error=access_denied&error_description=Database+error",
+      ),
+    );
+
+    expect(exchangeCodeForSession).not.toHaveBeenCalled();
+    expect(res.headers.get("location")).toBe(
+      `http://localhost:3000/login?error=${encodeURIComponent("Database error")}`,
     );
   });
 });

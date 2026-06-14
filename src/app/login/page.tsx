@@ -15,9 +15,10 @@ export default async function LoginPage({ searchParams }: LoginPageProps) {
       </p>
 
       {error && (
-        <p role="alert" className="mt-4 text-sm text-red-600">
-          ログインに失敗しました。もう一度お試しください。
-        </p>
+        <div role="alert" className="mt-4 text-sm text-red-600">
+          <p>ログインに失敗しました。</p>
+          <p className="mt-1 break-all text-xs">{error}</p>
+        </div>
       )}
 
       <form action={signInWithGoogle} className="mt-6">
