@@ -446,11 +446,8 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 
 ### Supabase 認証のセットアップ
 
-1. [Supabase](https://supabase.com/) でプロジェクトを作成する
-2. `Authentication > Providers` で **Google** を有効化し、Google Cloud で発行した OAuth クライアント ID / シークレットを設定する
-3. `Authentication > URL Configuration` のリダイレクト URL に `http://localhost:3000/auth/callback`（本番は本番ドメイン）を追加する
-4. `Project Settings > API` の URL と anon key を `.env.local` に設定する
-5. `bun dev` で起動し、`/login` から Google ログインを確認する
+Google OAuth による認証のセットアップ手順（ローカル / Vercel Preview / 本番）と
+トラブルシューティングは **[`supabase-auth.md`](./supabase-auth.md)** に集約している。
 
 ---
 
@@ -458,3 +455,4 @@ NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
 
 - [README.md](../README.md) - プロジェクト概要
 - [アーキテクチャ設計](./architecture.md) - システム設計
+- [Supabase 認証セットアップ](./supabase-auth.md) - Google OAuth 認証の設定手順
