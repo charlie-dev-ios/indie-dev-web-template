@@ -15,6 +15,9 @@ export default function Home() {
         <Link href="/account" className="underline underline-offset-4">
           アカウント
         </Link>
+        <Link href="/todos" className="underline underline-offset-4">
+          TODO
+        </Link>
       </div>
     </main>
   );
