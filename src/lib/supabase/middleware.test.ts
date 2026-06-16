@@ -52,10 +52,28 @@ describe("updateSession", () => {
     expect(res).toBe(nextResponse);
   });
 
-  it("非保護ルートは未認証でもそのまま通す", async () => {
+  it("未認証でトップ画面にアクセスすると login へリダイレクトする", async () => {
     getUser.mockResolvedValue({ data: { user: null } });
     const { updateSession } = await import("./middleware");
     const res = await updateSession(makeRequest("/"));
+
+    expect(redirectFn).toHaveBeenCalled();
+    expect(res).toBe(redirectResponse);
+  });
+
+  it("認証済みならトップ画面はそのまま通す", async () => {
+    getUser.mockResolvedValue({ data: { user: { id: "u1" } } });
+    const { updateSession } = await import("./middleware");
+    const res = await updateSession(makeRequest("/"));
+
+    expect(redirectFn).not.toHaveBeenCalled();
+    expect(res).toBe(nextResponse);
+  });
+
+  it("非保護ルートは未認証でもそのまま通す", async () => {
+    getUser.mockResolvedValue({ data: { user: null } });
+    const { updateSession } = await import("./middleware");
+    const res = await updateSession(makeRequest("/login"));
 
     expect(redirectFn).not.toHaveBeenCalled();
     expect(res).toBe(nextResponse);
