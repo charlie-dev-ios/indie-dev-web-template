@@ -4,6 +4,9 @@ import { type NextRequest, NextResponse } from "next/server";
 /** 認証が必要なパスのプレフィックス。 */
 const PROTECTED_PREFIXES = ["/account", "/todos"];
 
+/** 認証が必要な完全一致パス（トップ画面など）。 */
+const PROTECTED_EXACT = ["/"];
+
 /**
  * リクエストごとに Supabase セッションを更新する。
  * 未認証ユーザーが保護ルートへアクセスした場合は login へリダイレクトする。
@@ -44,9 +47,9 @@ export async function updateSession(request: NextRequest) {
     } = await supabase.auth.getUser();
 
     const pathname = request.nextUrl.pathname;
-    const isProtected = PROTECTED_PREFIXES.some((prefix) =>
-      pathname.startsWith(prefix),
-    );
+    const isProtected =
+      PROTECTED_EXACT.includes(pathname) ||
+      PROTECTED_PREFIXES.some((prefix) => pathname.startsWith(prefix));
 
     if (!user && isProtected) {
       const url = request.nextUrl.clone();

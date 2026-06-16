@@ -2,9 +2,15 @@ import { redirect } from "next/navigation";
 import { TodoForm } from "@/components/todos/TodoForm";
 import { TodoList } from "@/components/todos/TodoList";
 import type { Todo } from "@/lib/schemas/todo";
-import { createClient } from "@/lib/supabase/server";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 
 export default async function TodosPage() {
+  // Supabase 未設定（テンプレートのフォーク直後など）では認証できないため
+  // login へ誘導する（保護ルートのため）。
+  if (!isSupabaseConfigured()) {
+    redirect("/login");
+  }
+
   const supabase = await createClient();
   const {
     data: { user },

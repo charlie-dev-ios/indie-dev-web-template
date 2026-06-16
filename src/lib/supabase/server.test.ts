@@ -47,3 +47,23 @@ describe("createClient (server)", () => {
     expect(cookies.getAll()).toEqual([{ name: "sb", value: "v" }]);
   });
 });
+
+describe("isSupabaseConfigured", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it("URL と anon key が揃っていれば true を返す", async () => {
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "https://example.supabase.co");
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY", "anon-key");
+    const { isSupabaseConfigured } = await import("./server");
+    expect(isSupabaseConfigured()).toBe(true);
+  });
+
+  it("環境変数が未設定なら false を返す", async () => {
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_URL", "");
+    vi.stubEnv("NEXT_PUBLIC_SUPABASE_ANON_KEY", "");
+    const { isSupabaseConfigured } = await import("./server");
+    expect(isSupabaseConfigured()).toBe(false);
+  });
+});
