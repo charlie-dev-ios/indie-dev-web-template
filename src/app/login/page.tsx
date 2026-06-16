@@ -1,4 +1,5 @@
 import { AlertCircle } from "lucide-react";
+import { redirect } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -7,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { createClient, isSupabaseConfigured } from "@/lib/supabase/server";
 import { signInWithGoogle } from "./actions";
 
 interface LoginPageProps {
@@ -43,6 +45,17 @@ function GoogleIcon() {
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
   const { error } = await searchParams;
+
+  // ログイン済みのユーザーはトップ画面へ送る。
+  if (isSupabaseConfigured()) {
+    const supabase = await createClient();
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+    if (user) {
+      redirect("/");
+    }
+  }
 
   return (
     <main className="flex min-h-svh w-full items-center justify-center bg-muted/40 px-4 py-12">
