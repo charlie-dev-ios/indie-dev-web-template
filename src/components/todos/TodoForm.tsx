@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useState } from "react";
 import { createTodoAction, type TodoFormState } from "@/app/todos/actions";
 
 const initialState: TodoFormState = {};
@@ -8,12 +8,20 @@ const initialState: TodoFormState = {};
 /**
  * TODO を新規作成するフォーム。
  * Server Action を useActionState で呼び出し、バリデーションエラーを表示する。
+ * 入力欄は制御コンポーネントとし、成功時のみクリア（エラー時は入力を保持）する。
  */
 export function TodoForm() {
+  const [title, setTitle] = useState("");
   const [state, formAction, pending] = useActionState(
     createTodoAction,
     initialState,
   );
+
+  useEffect(() => {
+    if (!state.error) {
+      setTitle("");
+    }
+  }, [state]);
 
   return (
     <form action={formAction} className="flex flex-col gap-2">
@@ -21,6 +29,8 @@ export function TodoForm() {
         <input
           type="text"
           name="title"
+          value={title}
+          onChange={(event) => setTitle(event.target.value)}
           placeholder="新しい TODO を入力"
           aria-label="TODO のタイトル"
           className="flex-1 rounded-md border border-input bg-background px-3 py-2 text-sm"

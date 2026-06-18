@@ -21,10 +21,13 @@ export default async function TodosPage() {
     redirect("/login");
   }
 
-  const { data } = await supabase
+  const { data, error } = await supabase
     .from("todos")
     .select("*")
     .order("created_at", { ascending: false });
+  if (error) {
+    console.error("[todos] 一覧の取得に失敗しました:", error);
+  }
   const todos = (data ?? []) as Todo[];
 
   return (
