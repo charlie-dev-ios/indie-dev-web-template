@@ -49,7 +49,7 @@
 ### 認証（Supabase Auth）
 
 - **方式**: Supabase Auth（Google OAuth）を `@supabase/ssr` で SSR 統合
-- **セッション管理**: Cookie ベース。`middleware.ts` が全リクエストでセッションを更新し、保護ルート（`/account`）への未認証アクセスを `/login` へリダイレクトする
+- **セッション管理**: Cookie ベース。`middleware.ts` が全リクエストでセッションを更新し、保護ルート（`/account` / `/todos`）への未認証アクセスを `/login` へリダイレクトする
 - **クライアント生成**:
   - `src/lib/supabase/client.ts` — ブラウザ（Client Component）用
   - `src/lib/supabase/server.ts` — サーバー（Server Component / Route Handler / Server Action）用
@@ -59,8 +59,19 @@
   2. 認可後、`/auth/callback` の Route Handler が認可コードをセッションに交換
   3. `/account` でユーザー情報を表示、`signOutAction` でサインアウト
 - **未設定時の挙動**: Supabase の環境変数が未設定の場合、middleware は認証処理をスキップする（フォーク直後でもテンプレートが起動できるようにするため）
-- **設計判断**: ユーザーデータは Supabase の `auth.users`（セッション情報）のみを扱い、追加の `profiles` テーブルは設けない（YAGNI）。プロフィール拡張が必要になった時点でテーブルと RLS を追加する
+- **設計判断**: 認証で扱うユーザー情報は Supabase の `auth.users`（セッション情報）に閉じ、追加の `profiles` テーブルは設けない（YAGNI）。プロフィール拡張が必要になった時点でテーブルと RLS を追加する
 - **セットアップ手順**: [`supabase-auth.md`](./supabase-auth.md) を参照（ローカル / Preview / 本番 の設定とトラブルシューティング）
+
+### ユーザーデータ（TODO）
+
+- **方式**: Supabase（Postgres）の `public.todos` テーブルでユーザーごとの TODO を管理する。認証で得た `auth.users.id` を `user_id` で参照する
+- **データ分離**: テーブルに **RLS（Row Level Security）** を有効化し、`auth.uid() = user_id` のポリシーで「自分の TODO のみ」参照・作成・更新・削除できるようにする。`anon` キーでも RLS により他人のデータには触れられない
+- **アクセス経路**: すべて Server Component / Server Action から Cookie セッション付きの Supabase クライアント（`src/lib/supabase/server.ts`）経由で操作する。クライアントへ直接 DB クライアントは公開しない
+  - `src/app/todos/page.tsx` — 一覧取得（Server Component、保護ルート）
+  - `src/app/todos/actions.ts` — 作成 / 完了トグル / 削除（Server Action）。入力は `src/lib/schemas/todo.ts` の Zod スキーマで検証する
+  - `src/components/todos/` — `TodoForm`（入力、Client Component）/ `TodoList` / `TodoItem`（表示、Server Component）
+- **マイグレーション**: `supabase/migrations/` に SQL を配置する。スキーマと RLS、適用手順は [`supabase-todo.md`](./supabase-todo.md) を参照
+- **設計判断**: 状態管理ライブラリや楽観的更新は導入せず、Server Action 実行後に `revalidatePath('/todos')` で再取得する最小構成とする（YAGNI）。必要になった時点でクライアント側の最適化を足す
 
 ## 通信フロー
 

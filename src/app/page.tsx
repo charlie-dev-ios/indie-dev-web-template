@@ -27,12 +27,16 @@ export default async function Home() {
         Web 個人開発用のテンプレートです。`docs/`
         配下のドキュメントを参照して開発を始めてください。
       </p>
-
       <div className="mt-6 flex flex-wrap gap-3">
         {isAuthenticated ? (
-          <Button asChild>
-            <Link href="/account">アカウント</Link>
-          </Button>
+          <>
+            <Button asChild>
+              <Link href="/account">アカウント</Link>
+            </Button>
+            <Button asChild variant="outline">
+              <Link href="/todos">TODO</Link>
+            </Button>
+          </>
         ) : (
           <Button asChild>
             <Link href="/login">ログイン</Link>

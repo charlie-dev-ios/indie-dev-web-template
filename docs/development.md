@@ -456,3 +456,4 @@ Google OAuth による認証のセットアップ手順（ローカル / Vercel 
 - [README.md](../README.md) - プロジェクト概要
 - [アーキテクチャ設計](./architecture.md) - システム設計
 - [Supabase 認証セットアップ](./supabase-auth.md) - Google OAuth 認証の設定手順
+- [Supabase TODO データセットアップ](./supabase-todo.md) - TODO テーブル / RLS の設定手順
