@@ -2,7 +2,7 @@ import { createServerClient } from "@supabase/ssr";
 import { type NextRequest, NextResponse } from "next/server";
 
 /** 認証が必要なパスのプレフィックス。 */
-const PROTECTED_PREFIXES = ["/account"];
+const PROTECTED_PREFIXES = ["/account", "/todos"];
 
 /** 認証が必要な完全一致パス（トップ画面など）。 */
 const PROTECTED_EXACT = ["/"];
